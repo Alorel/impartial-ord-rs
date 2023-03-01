@@ -1,0 +1,84 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+      - main
+    paths-ignore:
+      - .github/CODE_OF_CONDUCT.md
+      - .github/CODEOWNERS
+      - .github/dependabot.yml
+      - .github/FUNDING.yml
+      - LICENSE
+      - .gitignore
+  pull_request:
+    paths-ignore:
+      - .github/CODE_OF_CONDUCT.md
+      - .github/CODEOWNERS
+      - .github/dependabot.yml
+      - .github/FUNDING.yml
+      - LICENSE
+      - .gitignore
+  schedule:
+    - cron: "0 5 * * 1,3,6"
+
+permissions:
+  contents: read
+
+env:
+  CARGO_INCREMENTAL: 0
+  RUSTFLAGS: --deny warnings
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Init toolchain
+        uses: dtolnay/rust-toolchain@v1
+        id: toolchain
+        with:
+          toolchain: stable
+          components: rustfmt
+      - name: Lint
+        run: cargo fmt --check
+  test:
+    name: Rust ${{matrix.toolchain}} on ${{matrix.os}}
+    runs-on: ${{matrix.os}}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - windows-latest
+          - ubuntu-latest
+        toolchain:
+          - stable
+          - nightly
+          - 1.56.0 # min supported by 2021 edition
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Init toolchain
+        uses: dtolnay/rust-toolchain@master
+        id: toolchain
+        with:
+          toolchain: ${{matrix.toolchain}}
+          components: rustfmt
+      - name: Cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: v1-cargo-${{runner.os}}-${{steps.toolchain.outputs.cachekey}}-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: v1-cargo-${{runner.os}}-${{steps.toolchain.outputs.cachekey}}-
+      - name: Build
+        run: cargo build --workspace --tests --locked
+      - name: Test
+        run: cargo test --workspace --locked
