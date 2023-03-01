@@ -1,25 +1,31 @@
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [package]
-name = "rs-lib-template-repo"
+name = "impartial-ord"
 version = "0.1.0"
 edition = "2021"
-publish = false
-#rust-version = "0.69.420"
+rust-version = "1.56.0"
 authors = [
   "Alorel <amolc@pm.me>",
 ]
 license = "MIT"
 readme = "README.md"
-description = "Shame - I haven't changed the template description"
-repository = "https://github.com/Alorel/XXX"
-keywords = []
-categories = []
+description = "Derives a quicker PartialOrd for types that already implement Ord"
+repository = "https://github.com/Alorel/impartial-ord-rs"
+keywords = ["derive", "ord", "partialord", "macro"]
+categories = ["development-tools"]
 include = [
   "src/",
   "Cargo.toml",
 ]
 
-[features]
+[lib]
+proc-macro = true
+
+[workspace]
+members = ["compilation-test"]
 
 [dependencies]
+proc-macro2 = "1"
+quote = "1"
+syn = "1"

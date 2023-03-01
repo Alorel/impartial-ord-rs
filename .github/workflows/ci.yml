@@ -62,11 +62,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Init toolchain
-        uses: dtolnay/rust-toolchain@master
+        uses: dtolnay/rust-toolchain@v1
         id: toolchain
         with:
           toolchain: ${{matrix.toolchain}}
-          components: rustfmt
       - name: Cache
         uses: actions/cache@v3
         with:
