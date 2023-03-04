@@ -36,10 +36,10 @@ pub fn derive_partial_ord(input: proc_macro::TokenStream) -> proc_macro::TokenSt
 
     (quote! {
         #[automatically_derived]
-        impl #gen_impl core::cmp::PartialOrd for #struct_name #gen_type #gen_where {
+        impl #gen_impl ::core::cmp::PartialOrd for #struct_name #gen_type #gen_where {
             #[inline]
-            fn partial_cmp(&self, other: &Self) -> Option<core::cmp::Ordering> {
-                Some(core::cmp::Ord::cmp(self, other))
+            fn partial_cmp(&self, other: &Self) -> Option<::core::cmp::Ordering> {
+                Some(::core::cmp::Ord::cmp(self, other))
             }
         }
     })
@@ -65,7 +65,7 @@ fn render_generics(generics: &Generics) -> TokenStream {
                     Spacing::Alone,
                 );
 
-                quote! { #t #join_punct core::cmp::Ord }
+                quote! { #t #join_punct ::core::cmp::Ord }
             }
             other => other.to_token_stream(),
         })
