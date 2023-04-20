@@ -29,14 +29,17 @@ use syn::{parse_macro_input, DeriveInput, GenericParam, Generics, Token};
 pub fn derive_partial_ord(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
 
-    let (_, gen_type, gen_where) = input.generics.split_for_impl();
+    let gen_suffix = {
+        let (_, gen_type, gen_where) = input.generics.split_for_impl();
+        quote! { #gen_type #gen_where }
+    };
     let struct_name = &input.ident;
 
-    let gen_impl = render_generics(&input.generics);
+    let gen_impl = render_generics(input.generics);
 
     (quote! {
         #[automatically_derived]
-        impl #gen_impl ::core::cmp::PartialOrd for #struct_name #gen_type #gen_where {
+        impl #gen_impl ::core::cmp::PartialOrd for #struct_name #gen_suffix {
             #[inline]
             fn partial_cmp(&self, other: &Self) -> Option<::core::cmp::Ordering> {
                 Some(::core::cmp::Ord::cmp(self, other))
@@ -47,7 +50,7 @@ pub fn derive_partial_ord(input: proc_macro::TokenStream) -> proc_macro::TokenSt
 }
 
 #[inline(always)]
-fn render_generics(generics: &Generics) -> TokenStream {
+fn render_generics(generics: Generics) -> TokenStream {
     if generics.params.is_empty() {
         return TokenStream::new();
     }
@@ -57,9 +60,10 @@ fn render_generics(generics: &Generics) -> TokenStream {
 
     let body = generics
         .params
-        .iter()
+        .into_iter()
         .map(move |f| match f {
-            GenericParam::Type(t) => {
+            GenericParam::Type(mut t) => {
+                t.default = None;
                 let join_punct = Punct::new(
                     if t.colon_token.is_some() { '+' } else { ':' },
                     Spacing::Alone,
