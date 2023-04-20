@@ -26,3 +26,6 @@ struct E {
 struct Foo<T: Clone, E>(T, E)
 where
     E: Hash;
+
+#[derive(Eq, PartialEq, Ord, ImpartialOrd)]
+struct G<T = u8>(T);
