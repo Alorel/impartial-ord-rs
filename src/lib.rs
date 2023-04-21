@@ -64,14 +64,19 @@ fn render_generics(generics: Generics) -> TokenStream {
         .map(move |f| match f {
             GenericParam::Type(mut t) => {
                 t.default = None;
-                let join_punct = Punct::new(
+                let p = Punct::new(
                     if t.colon_token.is_some() { '+' } else { ':' },
                     Spacing::Alone,
                 );
 
-                quote! { #t #join_punct ::core::cmp::Ord }
+                quote! { #t #p ::core::cmp::Ord }
             }
-            other => other.to_token_stream(),
+            GenericParam::Const(mut t) => {
+                t.default = None;
+
+                t.into_token_stream()
+            }
+            other => other.into_token_stream(),
         })
         .collect::<Punctuated<TokenStream, Token![,]>>();
 
