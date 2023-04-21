@@ -29,3 +29,6 @@ where
 
 #[derive(Eq, PartialEq, Ord, ImpartialOrd)]
 struct G<T = u8>(T);
+
+#[derive(Eq, PartialEq, Ord, ImpartialOrd)]
+struct H<E, const T: usize = 0>(E, [u8; T]);
