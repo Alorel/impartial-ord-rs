@@ -9,3 +9,4 @@ rust-version = "1.59.0"
 
 [dependencies]
 impartial-ord = {path = ".."}
+static_assertions = "1.1.0"
