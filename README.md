@@ -11,7 +11,7 @@ Derives a quicker `PartialOrd` for types that already implement `Ord`.
 struct MyStruct;
 
 // Output
-impl PartialOrd for MyStruct {
+impl PartialOrd for MyStruct where Self: Ord {
     #[inline]
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(Ord::cmp(self, other))
