@@ -54,8 +54,8 @@ pub fn derive_partial_ord(input: proc_macro::TokenStream) -> proc_macro::TokenSt
         #[automatically_derived]
         impl #gen_impl ::core::cmp::PartialOrd for #ident #gen_type #gen_where {
             #[inline]
-            fn partial_cmp(&self, other: &Self) -> Option<::core::cmp::Ordering> {
-                Some(::core::cmp::Ord::cmp(self, other))
+            fn partial_cmp(&self, other: &Self) -> ::core::option::Option<::core::cmp::Ordering> {
+                ::core::option::Option::Some(::core::cmp::Ord::cmp(self, other))
             }
         }
     })
