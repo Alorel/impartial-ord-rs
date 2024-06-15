@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+      - main
+    paths-ignore:
+      - .github/CODE_OF_CONDUCT.md
+      - .github/CODEOWNERS
+      - .github/dependabot.yml
+      - .github/FUNDING.yml
+      - LICENSE
+      - .gitignore
+  pull_request:
+    paths-ignore:
+      - .github/CODE_OF_CONDUCT.md
+      - .github/CODEOWNERS
+      - .github/dependabot.yml
+      - .github/FUNDING.yml
+      - LICENSE
+      - .gitignore
+
+permissions:
+  contents: read
+
+env:
+  CARGO_INCREMENTAL: 0
+  RUSTFLAGS: --deny warnings
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Init toolchain
+        uses: alorel-actions/cargo/init@v1
+        id: toolchain
+        with:
+          toolchain: stable
+          cache-prefix: lint
+          local: true
+          components: rustfmt
+
+      - name: Lint
+        run: cargo fmt --check
+
+      - name: Readme check
+        uses: alorel-actions/cargo/rdme@v1
+
+  test:
+    name: Rust ${{matrix.toolchain}} on ${{matrix.os}}
+    runs-on: ${{matrix.os}}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - windows-latest
+          - ubuntu-latest
+        toolchain:
+          - stable
+          - nightly
+          - 1.59.0 # min needed for const generics
+        exclude:
+          - os: windows-latest
+            toolchain: nightly
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Init toolchain
+        uses: alorel-actions/cargo/init@v1
+        id: toolchain
+        with:
+          toolchain: ${{ matrix.toolchain }}
+          cache-prefix: test
+          local: true
+
+      - name: Test
+        run: cargo test --workspace --locked
