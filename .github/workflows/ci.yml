@@ -4,21 +4,21 @@ on:
     branches:
       - master
     paths-ignore:
-      - .github/CODE_OF_CONDUCT.md
-      - .github/CODEOWNERS
-      - .github/dependabot.yml
-      - .github/FUNDING.yml
-      - LICENSE
-      - .gitignore
+      - ../CODE_OF_CONDUCT.md
+      - ../CODEOWNERS
+      - ../dependabot.yml
+      - ../FUNDING.yml
+      - ../../LICENSE
+      - ../../.gitignore
       - .gitattributes
   pull_request:
     paths-ignore:
-      - .github/CODE_OF_CONDUCT.md
-      - .github/CODEOWNERS
-      - .github/dependabot.yml
-      - .github/FUNDING.yml
-      - LICENSE
-      - .gitignore
+      - ../CODE_OF_CONDUCT.md
+      - ../CODEOWNERS
+      - ../dependabot.yml
+      - ../FUNDING.yml
+      - ../../LICENSE
+      - ../../.gitignore
       - .gitattributes
 
 permissions:

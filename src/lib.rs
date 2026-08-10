@@ -1,8 +1,8 @@
 //! Derives a quicker `PartialOrd` for types that already implement `Ord`.
 //!
-//! [![Master CI badge](https://github.com/Alorel/impartial-ord-rs/actions/workflows/lint-n-test.yml/badge.svg?branch=master)](https://github.com/Alorel/impartial-ord-rs/actions/workflows/lint-n-test.yml?query=branch%3Amaster)
+//! [![MASTER CI status](https://github.com/Alorel/impartial-ord-rs/actions/workflows/ci.yml/badge.svg)](https://github.com/Alorel/impartial-ord-rs/actions/workflows/ci.yml?query=branch%3Amaster)
 //! [![crates.io badge](https://img.shields.io/crates/v/impartial-ord)](https://crates.io/crates/impartial-ord)
-//! [![docs.rs badge](https://img.shields.io/docsrs/impartial-ord?label=docs.rs)](https://docs.rs/impartial-ord)
+//! [![Coverage Status](https://coveralls.io/repos/github/Alorel/impartial-ord-rs/badge.svg)](https://coveralls.io/github/Alorel/impartial-ord-rs)
 //! [![dependencies badge](https://img.shields.io/librariesio/release/cargo/impartial-ord)](https://libraries.io/cargo/impartial-ord)
 //!
 //! ```
